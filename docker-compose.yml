@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: gtp-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: gtp
+      POSTGRES_USER: gtp
+      POSTGRES_PASSWORD: gtp
+    volumes:
+      - gtp-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gtp -d gtp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: gtp-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://gtp:gtp@postgres:5432/gtp
+    ports:
+      - "8011:8011"
+
+  frontend:
+    build: ./frontend
+    container_name: gtp-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5181:80"
+
+volumes:
+  gtp-pgdata:
+    name: gtp-pgdata
