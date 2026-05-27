@@ -76,7 +76,7 @@ gas-turbine-performance/
 │   │   │             integration/upload）
 │   │   ├── services/ 算法 + 调度 + 告警 + 跨系统出库
 │   │   └── seed_data.py  幂等演示数据：2 台燃机 + 24h 读数 + 3 条告警
-│   └── tests/        6 个 pytest 文件，sqlite + TestClient
+│   └── tests/        7 个 pytest 文件 / 107 测试全过，sqlite + TestClient
 ├── frontend/         Vite + React 18 + TS + Ant Design 5 + ECharts + Zustand
 │   └── src/          7 个页面（登录/大屏/燃机/CC/性能/退化/告警/用户）
 └── docker-compose.yml  postgres + backend(8011) + frontend(5181)
@@ -127,7 +127,7 @@ docker compose up -d --build
 cd backend && pytest -v
 ```
 
-6 个测试文件覆盖 ISO 修正算法 / EGT 散布 / 退化率 / 振动等级、auth+RBAC、燃机/HRSG/ST CRUD、读数+性能批次、告警生命周期、跨系统接收。
+**107 测试全过**（7 个文件）：48 算法单测（ISO 修正 / 热耗率 / EGT 散布 / 退化率 / ISO 10816 振动等级）+ 11 调度作业测试（perf_calc / health_check / degradation_daily + 告警去重）+ 48 路由集成测试（auth+RBAC、燃机/HRSG/ST CRUD、读数+性能批次、告警生命周期、跨系统接收、CSV 上传）。SQLite 内存 DB + FastAPI TestClient，全程不依赖 PostgreSQL。
 
 ## 🔗 它在大图中的位置
 
