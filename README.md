@@ -140,3 +140,8 @@ cd backend && pytest -v
 ## 📜 License
 
 仅供智慧火电厂内部研究与教学使用。
+
+
+## 持续维护
+
+[开发与验收说明](docs/MAINTENANCE.md)：自动检查、回归测试与演示边界。
